@@ -1,15 +1,27 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Editor from '@/components/Editor'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/', 
+      redirect: 'editor'
+    },
+    {
+      path: '/editor',
+      name: 'editor',
+      component: Editor
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+    },
+    {
+      path: '/personal',
+      name: 'personal'
     }
   ]
 })

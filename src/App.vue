@@ -1,23 +1,45 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <el-menu
+      :default-active="activeMenu"
+      class="app-menu"
+      mode="horizontal"
+      :router="true"
+      @select="handleSelect"
+      background-color="#398dee"
+      text-color="#fff"
+      active-text-color="#fff">
+      <el-menu-item index="editor">写笔记</el-menu-item>
+      <el-menu-item index="settings">设置</el-menu-item>
+      <el-menu-item index="personal">个人中心</el-menu-item>
+    </el-menu>
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-}
-</script>
+  name: "App",
+  data() {
+    return {
+      menus: ["editor", "settings", "personal"]
+    }
+  },
+  methods: {
+    handleSelect() {
 
+    }
+  },
+  computed: {
+    activeMenu() {
+      return this.menus.filter(n => n === this.$route.name)[0];
+    }
+  }
+};
+</script>
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
