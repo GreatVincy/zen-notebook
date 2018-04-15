@@ -1,5 +1,17 @@
 @import "normalize.css";
 
-body {
-  min-height: 100vh;
+* {
+  box-sizing: border-box;
 }
+
+html, body {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.clearfix:after {
+  content:""; 
+  display: block; 
+  clear:both; 
+}
+
