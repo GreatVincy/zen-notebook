@@ -104,7 +104,6 @@ typings/
 .next
 
 .gradle
-/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
