@@ -4,7 +4,7 @@ div.editor-root
     div.editor-input
       div.editor-tools-bar
         div.editor-tools-bar-title
-          input.editor-title-input(type="text" placeholder="请输入标题")
+          input.editor-title-input(type="text" placeholder="请输入标题" v-model="title")
         div.editor-tools-bar-icons
           i.el-icon-picture(title="插入图片")
           i.el-icon-arrow-left(title="撤销")
@@ -13,17 +13,46 @@ div.editor-root
           i.el-icon-edit(title="预览/编辑")
           i.el-icon-success(title="发布")
       div.editor-textarea
-        textarea
+        textarea(v-model="article" @input="markIt")
     div.editor-preview
-      div.editor-preview-title TestTitle
-      div.editor-preview-content
+      div.editor-preview-title {{title}}
+      div.editor-preview-content(class="markdown-body" v-html="markedArticle")
 </template>
 <script>
+import md from "markdown-it";
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-dark.css";
+import "github-markdown-css/github-markdown.css";
+const markdown = new md({
+  highlight: function (text, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, text).value;
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      try {
+        return hljs.highlightAuto(text).value;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+});
 export default {
   data() {
-    return {};
+    return {
+      title: "未命名笔记",
+      article: "",
+      markedArticle: ""
+    };
   },
-  methods: {}
+  methods: {
+    markIt(){
+      this.markedArticle = markdown.render(this.article);
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
@@ -34,6 +63,7 @@ $editor-font-size: 16px;
 $editor-font-weight: 400;
 $editor-line-height: 30px;
 $editor-background-color: #fcfaf2;
+$preview-background-color: #fefefe;
 $editor-title-background-color: #f5f2f2;
 $editor-icon-color: gray;
 
@@ -113,6 +143,7 @@ $editor-icon-color: gray;
       flex-basis: 50%;
       overflow: auto;
       display: flex;
+      background-color: $preview-background-color;
       flex-direction: column;
       .editor-preview-title {
         height: $tools-bar-height;
