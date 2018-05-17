@@ -18,28 +18,61 @@ div.editor-root
       div.editor-preview-title {{title}}
       div.editor-preview-content(class="markdown-body" v-html="markedArticle")
 </template>
+
 <script>
 import md from "markdown-it";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
 import "github-markdown-css/github-markdown.css";
+import "../vendor/katex/katex.min.css";
+
+import emoji from "markdown-it-emoji"
+import subscript from "markdown-it-sub"
+import superscript from "markdown-it-sup"
+import footnote from "markdown-it-footnote"
+import deflist from "markdown-it-deflist"
+import abbreviation from "markdown-it-abbr"
+import insert from "markdown-it-ins"
+import mark from "markdown-it-mark"
+import katex from "markdown-it-katex"
+import tasklists from "markdown-it-task-lists"
+
 const markdown = new md({
+  html: false,
+  xhtmlOut: false,
+  breaks: false,
+  langPrefix: "language-",
+  linkify: false,
+  typographer:  false,
+  quotes: "“”‘’",
   highlight: function (text, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, text).value;
       } catch (e) {
         console.error(e);
+        return text;
       }
     } else {
       try {
         return hljs.highlightAuto(text).value;
       } catch (e) {
         console.error(e);
+        return text;
       }
     }
   }
-});
+}).use(emoji)
+  .use(subscript)
+  .use(superscript)
+  .use(footnote)
+  .use(deflist)
+  .use(abbreviation)
+  .use(insert)
+  .use(mark)
+  .use(katex, { "throwOnError": false, "errorColor": " #cc0000" })
+  .use(tasklists);
+
 export default {
   data() {
     return {
@@ -48,6 +81,7 @@ export default {
       markedArticle: ""
     };
   },
+
   methods: {
     markIt(){
       this.markedArticle = markdown.render(this.article);
@@ -55,6 +89,7 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
 $tools-bar-height: 45px;
 $border-color: #d9d9d9;
