@@ -6,16 +6,19 @@ div.editor-root
         div.editor-tools-bar-title
           input.editor-title-input(type="text" placeholder="请输入标题" v-model="title")
         div.editor-tools-bar-icons
-          i.el-icon-picture(title="插入图片")
-          i.el-icon-arrow-left(title="撤销")
-          i.el-icon-arrow-right(title="重做")
-          i.el-icon-document(title="保存")
-          i.el-icon-edit(title="预览/编辑")
-          i.el-icon-success(title="发布")
+          i.fa.fa-image(title="插入图片")
+          i.fa.fa-undo(title="撤销")
+          i.fa.fa-repeat(title="重做")
+          i.fa.fa-save(title="保存")
+          i.fa.fa-columns(title="显示/关闭预览")
+          i.fa.fa-mail-forward(title="发布")
       div.editor-textarea
         textarea(ref="editor")
     div.editor-preview
-      div.editor-preview-title {{title}}
+      div.editor-preview-title-wrap
+        div.editor-preview-title(class="text-ellipsis") {{title}}
+        div.editor-preview-icons
+          i.fa.fa-expand(title="全屏预览")
       div.editor-preview-content(class="markdown-body" v-html="markedArticle")
 </template>
 
@@ -25,6 +28,7 @@ import Highlight from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
 import "github-markdown-css/github-markdown.css";
 import "../vendor/katex/katex.min.css";
+import "font-awesome/css/font-awesome.css";
 
 import Emoji from "markdown-it-emoji";
 import Subscript from "markdown-it-sub";
@@ -156,10 +160,11 @@ $editor-icon-color: gray;
           justify-content: flex-end;
           align-items: center;
           i {
-            margin: 0 20px 0;
-            font-size: 20px;
+            padding: 10px;
+            margin: 0 10px 0;
             color: $editor-icon-color;
             text-align: center;
+            cursor: pointer;            
           }
         }
       }
@@ -181,14 +186,33 @@ $editor-icon-color: gray;
       display: flex;
       background-color: $preview-background-color;
       flex-direction: column;
-      .editor-preview-title {
-        height: $tools-bar-height;
-        padding: 0 10px 0;
+      .editor-preview-title-wrap {
         flex: none;
+        height: $tools-bar-height;
         border-bottom: 1px solid $border-color;
-        font-size: 22px;
-        text-align: left;
-        line-height: $tools-bar-height;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        .editor-preview-title {
+          padding: 0 10px 0;
+          font-size: 22px;
+          text-align: left;
+          line-height: $tools-bar-height;
+          flex: auto;
+        }
+        .editor-preview-icons {
+          flex: none;
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+        }
+        i {
+          padding: 10px;
+          margin: 0 10px 0;
+          color: $editor-icon-color;
+          text-align: center;
+          cursor: pointer;
+        }
       }
       .editor-preview-content {
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;            

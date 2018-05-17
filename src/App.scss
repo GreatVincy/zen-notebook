@@ -19,3 +19,9 @@ html, body {
 .cm-s-default .cm-header {
   color: #2086fa !important;
 }
+
+.text-ellipsis {
+  white-space:nowrap; 
+  text-overflow:ellipsis; 
+  overflow: hidden; 
+}
