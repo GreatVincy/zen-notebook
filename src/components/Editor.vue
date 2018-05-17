@@ -13,31 +13,35 @@ div.editor-root
           i.el-icon-edit(title="预览/编辑")
           i.el-icon-success(title="发布")
       div.editor-textarea
-        textarea(v-model="article" @input="markIt")
+        textarea(ref="editor")
     div.editor-preview
       div.editor-preview-title {{title}}
       div.editor-preview-content(class="markdown-body" v-html="markedArticle")
 </template>
 
 <script>
-import md from "markdown-it";
-import hljs from "highlight.js";
+import Markdown from "markdown-it";
+import Highlight from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
 import "github-markdown-css/github-markdown.css";
 import "../vendor/katex/katex.min.css";
 
-import emoji from "markdown-it-emoji"
-import subscript from "markdown-it-sub"
-import superscript from "markdown-it-sup"
-import footnote from "markdown-it-footnote"
-import deflist from "markdown-it-deflist"
-import abbreviation from "markdown-it-abbr"
-import insert from "markdown-it-ins"
-import mark from "markdown-it-mark"
-import katex from "markdown-it-katex"
-import tasklists from "markdown-it-task-lists"
+import Emoji from "markdown-it-emoji";
+import Subscript from "markdown-it-sub";
+import Superscript from "markdown-it-sup";
+import Footnote from "markdown-it-footnote";
+import Deflist from "markdown-it-deflist";
+import Abbreviation from "markdown-it-abbr";
+import Insert from "markdown-it-ins";
+import Mark from "markdown-it-mark";
+import Katex from "markdown-it-katex";
+import TaskLists from "markdown-it-task-lists";
 
-const markdown = new md({
+import "codemirror/lib/codemirror.css";
+import CodeMirror from "codemirror";
+import "codemirror/mode/markdown/markdown.js";
+
+const markdown = new Markdown({
   html: false,
   xhtmlOut: false,
   breaks: false,
@@ -46,34 +50,46 @@ const markdown = new md({
   typographer:  false,
   quotes: "“”‘’",
   highlight: function (text, lang) {
-    if (lang && hljs.getLanguage(lang)) {
+    if (lang && Highlight.getLanguage(lang)) {
       try {
-        return hljs.highlight(lang, text).value;
+        return Highlight.highlight(lang, text).value;
       } catch (e) {
         console.error(e);
         return text;
       }
     } else {
       try {
-        return hljs.highlightAuto(text).value;
+        return Highlight.highlightAuto(text).value;
       } catch (e) {
         console.error(e);
         return text;
       }
     }
   }
-}).use(emoji)
-  .use(subscript)
-  .use(superscript)
-  .use(footnote)
-  .use(deflist)
-  .use(abbreviation)
-  .use(insert)
-  .use(mark)
-  .use(katex, { "throwOnError": false, "errorColor": " #cc0000" })
-  .use(tasklists);
+});
+markdown.use(Emoji)
+  .use(Subscript)
+  .use(Superscript)
+  .use(Footnote)
+  .use(Deflist)
+  .use(Abbreviation)
+  .use(Insert)
+  .use(Mark)
+  .use(Katex, { "throwOnError": false, "errorColor": " #cc0000" })
+  .use(TaskLists);
 
 export default {
+  mounted() {
+    const textArea = this.$refs.editor;
+    const editor = CodeMirror.fromTextArea(textArea, {
+              lineNumbers: true,
+              mode: "markdown",
+              theme: "default",
+              tabSize: "2",
+              scrollbarStyle: "native"
+    });
+    editor.on("change", () => this.markIt(editor));
+  },
   data() {
     return {
       title: "未命名笔记",
@@ -83,23 +99,19 @@ export default {
   },
 
   methods: {
-    markIt(){
+    markIt(editor){
+      this.article = editor.getValue();
       this.markedArticle = markdown.render(this.article);
     }
   }
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 $tools-bar-height: 45px;
 $border-color: #d9d9d9;
-$editor-font-color: #333;
-$editor-font-size: 16px;
-$editor-font-weight: 400;
-$editor-line-height: 30px;
-$editor-background-color: #fcfaf2;
+$editor-background-color: #fefefe;
 $preview-background-color: #fefefe;
-$editor-title-background-color: #f5f2f2;
 $editor-icon-color: gray;
 
 .editor-root {
@@ -152,23 +164,12 @@ $editor-icon-color: gray;
         }
       }
       .editor-textarea {
+        position: relative;
         height: calc(100vh - #{$tools-bar-height});
-        textarea {
-          display: block;
-          height: 100%;
-          width: 100%;
-          padding: 10px;
-          resize: none;
-          color: $editor-font-color;
+        .CodeMirror {
+          height: 100% !important;
           background-color: $editor-background-color;
-          font-size: $editor-font-size;
-          font-weight: $editor-font-weight;
-          line-height: $editor-line-height;
-          border: none;
-          outline: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          overflow: auto;
+          font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;              
         }
       }
     }
@@ -176,7 +177,7 @@ $editor-icon-color: gray;
       flex-grow: 1;
       flex-shrink: 0;
       flex-basis: 50%;
-      overflow: auto;
+      overflow: hidden;
       display: flex;
       background-color: $preview-background-color;
       flex-direction: column;
@@ -184,14 +185,15 @@ $editor-icon-color: gray;
         height: $tools-bar-height;
         padding: 0 10px 0;
         flex: none;
-        background-color: $editor-title-background-color;
         border-bottom: 1px solid $border-color;
         font-size: 22px;
         text-align: left;
         line-height: $tools-bar-height;
       }
       .editor-preview-content {
+        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;            
         flex: auto;
+        overflow: auto;
         padding: 10px;
       }
     }

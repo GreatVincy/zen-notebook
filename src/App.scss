@@ -1,12 +1,13 @@
 @import "normalize.css";
 
 * {
-  box-sizing: border-box;
+  box-sizing: border-box;  
 }
 
 html, body {
   min-height: 100vh;
   overflow: auto;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
 .clearfix:after {
@@ -15,3 +16,6 @@ html, body {
   clear:both; 
 }
 
+.cm-s-default .cm-header {
+  color: #2086fa !important;
+}
