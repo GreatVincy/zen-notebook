@@ -1,5 +1,5 @@
 <template lang="pug">
-div.notebook-viewer(:style="{width: width, height: height}")
+div.notebook-viewer(:style="{width: width, height: height, backgroundColor: backgroundColor}")
   div.notebook-viewer-title-wrap
     div.notebook-viewer-title(class="text-ellipsis") {{title}}
     div.notebook-viewer-title-icons
@@ -29,19 +29,23 @@ export default {
     raw: {
       type: String,
       default: ""
+    },
+    backgroundColor: {
+      type: String,
+      default: "#FBF9F1"
     }
   },
 
   components: {
-    "viewer": Viewer
+    viewer: Viewer
   },
 
   data() {
     return {
-      fullscreen: false,
-    }
+      fullscreen: false
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
