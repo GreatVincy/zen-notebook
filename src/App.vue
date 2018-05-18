@@ -9,7 +9,7 @@
         background-color="#398dee"
         text-color="#fff"
         active-text-color="#fff">
-        <el-menu-item index="editor">写笔记</el-menu-item>
+        <el-menu-item index="notebook">写笔记</el-menu-item>
         <el-menu-item index="settings">设置</el-menu-item>
         <el-menu-item index="personal">个人中心</el-menu-item>
       </el-menu>
@@ -25,7 +25,7 @@ export default {
   name: "ZenNotebookApp",
   data() {
     return {
-      menus: ["editor", "settings", "personal"]
+      menus: ["notebook", "settings", "personal"]
     }
   },
   methods: {

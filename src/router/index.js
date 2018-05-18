@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Editor from '@/components/Editor'
+import Notebook from '@/components/notebook/Notebook'
 
 Vue.use(Router)
 
@@ -8,12 +8,15 @@ export default new Router({
   routes: [
     {
       path: '/', 
-      redirect: 'editor'
+      redirect: 'notebook'
     },
     {
-      path: '/editor',
-      name: 'editor',
-      component: Editor
+      path: '/notebook',
+      name: 'notebook',
+      component: Notebook,
+      props: {
+        initialTitle: "未命名笔记"
+      }
     },
     {
       path: '/settings',
