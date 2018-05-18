@@ -33,9 +33,7 @@ export default {
   },
 
   data() {
-    return {
-
-    };
+    return {};
   },
 
   methods: {
@@ -54,19 +52,27 @@ export default {
     },
     updateArticle(editor, event) {
       this.$emit("textChange", editor.getValue());
-    }
+    },
+    undo() {
+      this.editor && this.editor.undo();
+    },
+    redo() {
+      this.editor && this.editor.redo();
+    },
+    insertImage() {}
   }
-}
+};
 </script>
 
 <style lang="scss">
 .editor {
   position: relative;
-  overflow: hidden;  
+  overflow: hidden;
   .CodeMirror {
     height: 100% !important;
     background-color: #fefefe;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;              
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   }
 }
 </style>

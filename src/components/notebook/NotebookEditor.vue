@@ -4,14 +4,14 @@ div.notebook-editor(:style="{width: width, height: height}")
     div.notebook-editor-title
       input.notebook-editor-title-input(type="text" placeholder="请输入标题" :value="initialTitle" @input="$emit('titleChange', $event.target.value)")
     div.notebook-editor-title-icons
-      i.fa.fa-image(title="插入图片")
-      i.fa.fa-undo(title="撤销")
-      i.fa.fa-repeat(title="重做")
+      i.fa.fa-image(title="插入图片" @click.prevent="insertImage")
+      i.fa.fa-undo(title="撤销" @click.prevent="undo")
+      i.fa.fa-repeat(title="重做" @click.prevent="redo")
       i.fa.fa-save(title="保存")
-      i.fa.fa-columns(title="显示/关闭预览")
+      i.fa.fa-columns(title="显示/关闭预览" @click.prevent="toggleViewer")
       i.fa.fa-mail-forward(title="发布")
   div.notebook-editor-wrap
-    editor(:initialText="initialText" @textChange="$emit('textChange', $event)")
+    editor(:initialText="initialText" @textChange="$emit('textChange', $event)" ref="editor")
 </template>
 
 <script>
@@ -39,18 +39,31 @@ export default {
   },
 
   components: {
-    "editor": Editor
-  },
-
-  mounted() {
-
+    editor: Editor
   },
 
   data() {
-    return {
-    };
+    return {};
+  },
+
+  methods: {
+    getEditor() {
+      return this.$refs.editor;
+    },
+    undo() {
+      this.getEditor().undo();
+    },
+    redo() {
+      this.getEditor().redo();
+    },
+    insertImage() {
+      this.getEditor().insertImage();
+    },
+    toggleViewer() {
+      this.$emit("toggleViewer");
+    }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -90,9 +103,9 @@ export default {
         margin: 0 10px 0;
         color: gray;
         text-align: center;
-        cursor: pointer;            
+        cursor: pointer;
       }
-    }    
+    }
   }
   .notebook-editor-wrap {
     flex: auto;

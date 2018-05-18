@@ -1,7 +1,8 @@
 <template lang="pug">
 div.notebook(:style="{width: width, height: height}")
-  notebook-editor(:initialText="initialText" :initialTitle="initialTitle" @textChange="text=$event" @titleChange="title=$event")
-  notebook-viewer(:raw="text" :title="title")
+  notebook-editor(:initialText="initialText"
+  :initialTitle="initialTitle" @textChange="text=$event" @titleChange="title=$event" @toggleViewer="showViewer=!showViewer")
+  notebook-viewer(:raw="text" :title="title" v-show="showViewer")
 </template>
 
 <script>
@@ -32,14 +33,15 @@ export default {
     "notebook-editor": NotebookEditor,
     "notebook-viewer": NotebookViewer
   },
-  
+
   data() {
     return {
       title: this.initialTitle,
-      text: this.initialText
-    }
+      text: this.initialText,
+      showViewer: true
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -47,16 +49,14 @@ export default {
   overflow: hidden;
   display: flex;
 }
-.notebook-editor, .notebook-viewer {
+.notebook-editor,
+.notebook-viewer {
   flex: 1 0 50% !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
 }
 .notebook-editor {
-  border-top: none !important;
   border-left: none !important;
-  border-bottom: none !important;
-
-}
-.notebook-viewer {
-  border: none !important;
 }
 </style>
