@@ -4,7 +4,7 @@ div.notebook-editor(:style="{width: width, height: height}")
     div.notebook-editor-title
       input.notebook-editor-title-input(type="text" placeholder="请输入标题" :value="initialTitle" @input="$emit('titleChange', $event.target.value)")
     div.notebook-editor-title-icons
-      i.fa.fa-image(title="插入图片" @click.prevent="insertImage")
+      i.fa.fa-image(title="插入图片" @click.prevent="showImageDialog=true")
       i.fa.fa-undo(title="撤销" @click.prevent="undo")
       i.fa.fa-repeat(title="重做" @click.prevent="redo")
       i.fa.fa-save(title="保存")
@@ -12,6 +12,25 @@ div.notebook-editor(:style="{width: width, height: height}")
       i.fa.fa-mail-forward(title="发布")
   div.notebook-editor-wrap
     editor(:initialText="initialText" @textChange="$emit('textChange', $event)" ref="editor")
+  el-dialog(title="插入图片" :visible.sync="showImageDialog" width="60%" :lock-scroll="false")
+    el-form(label-width="5em")
+      el-form-item(label="图片地址")
+        el-col(:span="18")
+          el-input(v-model="image.imageUrl" placeholder="请输入图片地址")
+        el-col(:span="2" style="text-align: center;")
+          span 或    
+        el-col(:span="4")
+          el-upload(action="")
+            el-button(size="small" type="primary") 点击上传
+      el-form-item(label="替代文字")
+        el-input(v-model="image.altText" placeholder="请输入替代文字")
+      el-form-item(label="悬浮标题")
+        el-input(v-model="image.optionalTitle" placeholder="请输入悬浮标题")   
+    span(slot="footer" class="dialog-footer")
+      el-button(@click="showImageDialog=false") 取消
+      el-button(type="primary" @click="insertImage") 确定
+  </span>
+</el-dialog>  
 </template>
 
 <script>
@@ -43,7 +62,14 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      showImageDialog: false,
+      image: {
+        url: "",
+        altText: "",
+        optionalTitle: ""
+      }
+    };
   },
 
   methods: {
@@ -57,7 +83,13 @@ export default {
       this.getEditor().redo();
     },
     insertImage() {
-      this.getEditor().insertImage();
+      const options = {
+        url: this.image.imageUrl,
+        altText: this.image.altText,
+        optionalTitle: this.image.optionalTitle
+      };
+      this.getEditor().insertImage(options);
+      this.showImageDialog = false;
     },
     toggleViewer() {
       this.$emit("toggleViewer");

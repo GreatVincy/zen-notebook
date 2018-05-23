@@ -59,7 +59,12 @@ export default {
     redo() {
       this.editor && this.editor.redo();
     },
-    insertImage() {}
+    insertImage(options) {
+      if(this.editor && options && options.url){
+        const image = `![${options.altText}](${options.url} "${options.optionalTitle}")`;
+        this.editor.replaceSelection(image);
+      }
+    }
   }
 };
 </script>
