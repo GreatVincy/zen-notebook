@@ -1,19 +1,21 @@
 # zen-notebook
 
-> PersonalNotebooK
+一个基于Vue的在线markdown编辑器，支持实时预览
 
-## Build Setup
+## 技术细节
+
+项目基于Vue-CLI构建，代码编辑器使用`CodeMirror`实现，Markdown渲染使用`markdown-it`实现，使用`highlight.js`进行代码高亮，界面布局使用`Element`;   
+项目是前后端分离的，但后端目前尚未实现
+
+## 运行方式
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动开发服务器
 npm run dev
 
-# build for production with minification
+# 生成环境构建
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
